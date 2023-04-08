@@ -1,0 +1,47 @@
+{% extends 'bootstrap/base.html' %}
+
+# ----------------------------------------  Read styles.css ----------------------------------------
+
+{% block styles %}
+{{ super() }}
+<link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+{% endblock %}
+
+# ---------------------------------------- Header Definition ----------------------------------------
+
+{% block title %}Restaurants{% endblock %}
+
+# ---------------------------------------- Body Table Definition ----------------------------------------
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>All Cafes</h1>
+            <div class="container">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        {% for item in cafes[0]: %}
+                        <th>{{ item }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for cafe in range(1, leng): %}
+                    <tr>
+                        {% for att in cafes[cafe]: %}
+                        <td>{{ att }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <p><a href="{{ url_for('home') }}">Return to index page</a></p>
+            <p><a href="{{ url_for('add_cafe') }}">Add Cafe</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
