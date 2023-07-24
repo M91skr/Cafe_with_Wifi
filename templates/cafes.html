@@ -22,18 +22,38 @@
             <div class="container">
                 <table class="table">
                     <thead>
-                    <tr>
-                        {% for item in cafes[0]: %}
-                        <th>{{ item }}</th>
-                        {% endfor %}
-                    </tr>
+                    <th>Id</th>
+                    <th>Cafe Name</th>
+                    <th>Location</th>
+                    <th>Work Hours</th>
+                    <th>Coffee</th>
+                    <th>Wifi</th>
+                    <th>Link</th>
                     </thead>
                     <tbody>
-                    {% for cafe in range(1, leng): %}
+                    {% for item in cafes %}
                     <tr>
-                        {% for att in cafes[cafe]: %}
-                        <td>{{ att }}</td>
-                        {% endfor %}
+                        <td>
+                            {{item.id}}
+                        </td>
+                        <td>
+                            {{item.cafe_name}}
+                        </td>
+                        <td>
+                            {{item.location}}
+                        </td>
+                        <td>
+                            {{item.work_hours}}
+                        </td>
+                        <td>
+                            {{item.coffee}}
+                        </td>
+                                                <td>
+                            {{item.wifi}}
+                        </td>
+                                                <td>
+                            {{item.link}}
+                        </td>
                     </tr>
                     {% endfor %}
                     </tbody>
