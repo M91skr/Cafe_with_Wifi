@@ -8,10 +8,11 @@ You can also add to this list if you know a cafe.
 
 from flask import Flask, render_template, redirect, url_for
 from flask_bootstrap import Bootstrap
+from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField
 from wtforms.validators import DataRequired, URL
-from flask_sqlalchemy import SQLAlchemy
+
 
 # ---------------------------------------- class to use Flask-wtf Creation ----------------------------------------
 
@@ -50,6 +51,7 @@ class Cafes(db.Model):
     coffee = db.Column(db.String(250), nullable=False)
     wifi = db.Column(db.String(250), nullable=False)
     link = db.Column(db.String(250), nullable=True)
+
 
 # with app.app_context():
 #     db.create_all()
