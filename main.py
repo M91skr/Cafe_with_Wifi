@@ -12,6 +12,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField
 from wtforms.validators import DataRequired, URL
+from flask_ckeditor import CKEditor, CKEditorField
 
 
 # ---------------------------------------- class to use Flask-wtf Creation ----------------------------------------
@@ -19,8 +20,8 @@ from wtforms.validators import DataRequired, URL
 
 class CafeForm(FlaskForm):
     cafe = StringField('Cafés Name', validators=[DataRequired()])
-    location = StringField('Ort', validators=[DataRequired()])
-    hours = StringField('Öffnungszeiten', validators=[DataRequired()])
+    location = CKEditorField('Ort', validators=[DataRequired()])
+    hours = CKEditorField('Öffnungszeiten', validators=[DataRequired()])
     menu = SelectField('Berühmte Getränke/ Speisen', choices=[("1", "🍨"), ("2", "🍨🍨"), ("3", "🍨🍨🍨"),
                                                               ("4", "️☕️"), ("5", "️☕️☕️"), ("6", "️☕️☕️☕️"),
                                                               ("7", "🥤"), ("8", "🥤🥤"), ("9", "🥤🥤🥤"),
@@ -35,6 +36,7 @@ class CafeForm(FlaskForm):
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "APP_CONF"
+ckeditor = CKEditor(app)
 Bootstrap(app)
 
 # Db connection
@@ -83,6 +85,37 @@ def add_cafe():
         print("False")
         return render_template('add.html', form=form)
     return render_template('add.html', form=form)
+
+
+@app.route("/blog/edit-cafe/<int:cafe_id>", methods=["GET", "POST"])
+def edit_cafe(cafe_id):
+    cafe = Cafes.query.get(cafe_id)
+    edit_form = CafeForm(
+        name=cafe.cafe_name,
+        location=cafe.location,
+        hours=cafe.work_hours,
+        menu=cafe.coffee,
+        wifi=cafe.wifi,
+        link=cafe.link
+    )
+    if edit_form.validate_on_submit():
+        cafe.cafe=edit_form.cafe.data,
+        cafe.location=edit_form.location.data,
+        cafe.hours=edit_form.hours.data,
+        cafe.menu=edit_form.menu.data,
+        cafe.wifi=edit_form.wifi.data,
+        cafe.link=edit_form.link.data
+        db.session.commit()
+        return redirect(url_for("cafes", cafe_id=cafe.id))
+    return render_template("edit_cafe.html", form=edit_form, is_edit=True)
+
+
+@app.route("/delete/<int:cafe_id>")
+def delete_cafe(cafe_id):
+    cafe_to_delete = Cafes.query.get(cafe_id)
+    db.session.delete(cafe_to_delete)
+    db.session.commit()
+    return redirect(url_for('cafes'))
 
 
 @app.route('/cafes')
